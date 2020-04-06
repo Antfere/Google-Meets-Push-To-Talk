@@ -2,7 +2,7 @@
 // @name           Google Meet Push To Talk
 // @namespace      com.codisms.googleplus.addPTT
 // @author         Anthony Atanasov
-// @description    Adds push to talk functionality to Google Meets
+// @description    Adds push to talk functionality to Google Meets in any language
 // @version        1.0
 // @include        https://meet.google.com/*
 //
@@ -50,11 +50,17 @@ var load = function(toggle) {
     muteButton.innerText = (settings.ptt_setting ? 'Disable' : 'Enable') + ' Push To Talk';
 
     if (settings.ptt_setting) {
-        if (document.querySelectorAll('div[aria-label="Désactiver le micro (Ctrl+d)"]').length == 0 && document.querySelectorAll('div[aria-label="Activer le micro (Ctrl+d)"]').length == 0) {
+        if ((document.querySelectorAll('div[aria-label="Désactiver le micro (Ctrl+d)"]').length != 0) && (document.querySelectorAll('div[aria-label="Activer le micro (Ctrl+d)"]').length != 0))
+        {
+            setTimeout(load, 1000);
+        }
+        else if ((document.querySelectorAll('div[aria-label="Turn off microphone (ctrl + d)"]').length != 0) && (document.querySelectorAll('div[aria-label="Turn on microphone (ctrl + d)"]').length != 0))
+        {
             setTimeout(load, 1000);
         }
         muteMicrophone();
-    } else {
+    }
+    else {
         unmuteMicrophone();
     }
 };
@@ -71,14 +77,34 @@ document.body.addEventListener('keyup', function (e) {
     }
 });
 
-muteMicrophone = function() {
-    var mutes = document.querySelectorAll('div[aria-label="Désactiver le micro (Ctrl+d)"]');
-    simulateClick(mutes[0]);
+muteMicrophone = function()
+{
+    if ((document.querySelectorAll('div[aria-label="Désactiver le micro (Ctrl+d)"]').length != 0))
+    {
+        var mutes1 = document.querySelectorAll('div[aria-label="Désactiver le micro (Ctrl+d)"]');
+        simulateClick(mutes1[0]);
+    }
+    else if (document.querySelectorAll('div[aria-label="Turn off microphone (ctrl + d)"]').length != 0)
+    {
+        var mutes = document.querySelectorAll('div[aria-label="Turn off microphone (ctrl + d)"]');
+        simulateClick(mutes[0]);
+    }
+
 }
 
-unmuteMicrophone = function() {
-    var mutes = document.querySelectorAll('div[aria-label="Activer le micro (Ctrl+d)"]');
-    simulateClick(mutes[0]);
+unmuteMicrophone = function()
+{
+    if (document.querySelectorAll('div[aria-label="Activer le micro (Ctrl+d)"]').length != 0)
+    {
+        var mutes1 = document.querySelectorAll('div[aria-label="Activer le micro (Ctrl+d)"]');
+        simulateClick(mutes1[0]);
+    }
+    else if (document.querySelectorAll('div[aria-label="Turn on microphone (ctrl + d)"]').length != 0)
+    {
+        var mutes = document.querySelectorAll('div[aria-label="Turn on microphone (ctrl + d)"]');
+        simulateClick(mutes[0]);
+    }
+
 }
 
 // Render UI.
@@ -97,3 +123,4 @@ document.body.appendChild(container);
 
 // Start loading the listeners.
 load();
+
